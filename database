@@ -1,0 +1,109 @@
+C:\Users\User>cd ../..
+
+C:\>cd xampp/mysql/bin
+
+C:\xampp\mysql\bin>mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 9
+Server version: 10.4.27-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> show databases;
++------------------------------+
+| Database                     |
++------------------------------+
+| 13020220183                  |
+| biodata                      |
+| cca                          |
+| information_schema           |
+| mysql                        |
+| performance_schema           |
+| perpus                       |
+| phpmyadmin                   |
+| praktikum                    |
+| test                         |
+| test_replication             |
+| toko beauty  kosmetik online |
+| uas                          |
+| universitas                  |
++------------------------------+
+14 rows in set (0.016 sec)
+
+MariaDB [(none)]> use universitas;
+Database changed
+MariaDB [universitas]> show tables;
++-----------------------+
+| Tables_in_universitas |
++-----------------------+
+| mahasiswa             |
+| matkul                |
+| pendaftaran           |
++-----------------------+
+3 rows in set (0.006 sec)
+
+MariaDB [universitas]> desc mahasiswa;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| stambuk | int(11)     | NO   | PRI | NULL    |       |
+| nama    | varchar(50) | YES  |     | NULL    |       |
+| jurusan | varchar(30) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+3 rows in set (0.030 sec)
+
+MariaDB [universitas]> desc matkul;
++-------------+-------------+------+-----+---------+-------+
+| Field       | Type        | Null | Key | Default | Extra |
++-------------+-------------+------+-----+---------+-------+
+| idmatkul    | int(11)     | NO   | PRI | NULL    |       |
+| nama_matkul | varchar(20) | YES  |     | NULL    |       |
+| sks         | int(11)     | YES  |     | NULL    |       |
++-------------+-------------+------+-----+---------+-------+
+3 rows in set (0.021 sec)
+
+MariaDB [universitas]> desc pendaftaran;
++------------+---------+------+-----+---------+-------+
+| Field      | Type    | Null | Key | Default | Extra |
++------------+---------+------+-----+---------+-------+
+| id_daftar  | int(11) | NO   | PRI | NULL    |       |
+| stambuk    | int(11) | YES  | MUL | NULL    |       |
+| idmatkul   | int(11) | YES  | MUL | NULL    |       |
+| tgl_daftar | date    | YES  |     | NULL    |       |
++------------+---------+------+-----+---------+-------+
+4 rows in set (0.022 sec)
+
+MariaDB [universitas]> select * from mahasiswa;
++------------+---------+--------------------+
+| stambuk    | nama    | jurusan            |
++------------+---------+--------------------+
+| 1302020111 | injun   | teknik informatika |
+| 1302022183 | zara    | teknik informatika |
+| 1312019213 | zakaria | sistem informasi   |
++------------+---------+--------------------+
+3 rows in set (0.010 sec)
+
+MariaDB [universitas]> select * from matkul;
++----------+-----------------+------+
+| idmatkul | nama_matkul     | sks  |
++----------+-----------------+------+
+|        1 | basis data      |    3 |
+|        2 | struktur data   |    2 |
+|        3 | pemrograman web |    3 |
++----------+-----------------+------+
+3 rows in set (0.001 sec)
+
+MariaDB [universitas]> select * from pendaftaran;
++-----------+------------+----------+------------+
+| id_daftar | stambuk    | idmatkul | tgl_daftar |
++-----------+------------+----------+------------+
+|         1 | 1312019213 |        3 | 2019-06-23 |
+|         2 | 1302020111 |        2 | 2020-04-30 |
+|         3 | 1302022183 |        1 | 2022-07-17 |
+|         4 | 1302022183 |        3 | 2022-07-17 |
+|         5 | 1312019213 |        2 | 2019-06-23 |
++-----------+------------+----------+------------+
+5 rows in set (0.001 sec)
