@@ -106,13 +106,6 @@ MariaDB [univ]> insert into pendaftaran values
     -> (1, 1312019213, 3, '2019-06-23'),
     -> (2, 1302020111, 2, '2020-04-30'),
     -> (3, 1302022183, 1, '2022-07-17'),
-    -> (3, 1302022183, 1, '2022-07-17'),
-    -> ;
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 5
-MariaDB [univ]> insert into pendaftaran values
-    -> (1, 1312019213, 3, '2019-06-23'),
-    -> (2, 1302020111, 2, '2020-04-30'),
-    -> (3, 1302022183, 1, '2022-07-17'),
     -> (4, 1302022183, 3, '2022-07-17'),
     -> (5, 1312019213, 2, '2019-06-23');
 Query OK, 5 rows affected (0.005 sec)
