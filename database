@@ -5,7 +5,7 @@ C:\>cd xampp/mysql/bin
 C:\xampp\mysql\bin>mysql -u root -p
 Enter password:
 Welcome to the MariaDB monitor.  Commands end with ; or \g.
-Your MariaDB connection id is 9
+Your MariaDB connection id is 284
 Server version: 10.4.27-MariaDB mariadb.org binary distribution
 
 Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
@@ -31,52 +31,94 @@ MariaDB [(none)]> show databases;
 | uas                          |
 | universitas                  |
 +------------------------------+
-14 rows in set (0.016 sec)
+14 rows in set (0.002 sec)
 
-MariaDB [(none)]> use universitas;
+MariaDB [(none)]> create database univ;
+Query OK, 1 row affected (0.004 sec)
+
+MariaDB [(none)]> use univ;
 Database changed
-MariaDB [universitas]> show tables;
-+-----------------------+
-| Tables_in_universitas |
-+-----------------------+
-| mahasiswa             |
-| matkul                |
-| pendaftaran           |
-+-----------------------+
-3 rows in set (0.006 sec)
+MariaDB [univ]> show tables;
+Empty set (0.001 sec)
 
-MariaDB [universitas]> desc mahasiswa;
+MariaDB [univ]> create table mahasiswa;
+ERROR 1113 (42000): A table must have at least 1 column
+MariaDB [univ]> create table mahasiswa (
+    -> stambuk int(15) primary key,
+    -> nama varchar(30),
+    -> jurusan varchar(30));
+Query OK, 0 rows affected (0.027 sec)
+
+MariaDB [univ]> create table matkul (
+    -> idmatkul int primary key,
+    -> nama_matkul varchar(50),
+    -> sks int);
+Query OK, 0 rows affected (0.009 sec)
+
+MariaDB [univ]> create table pendaftaran (
+    -> id_daftar int primary key,
+    -> stambuk int(15),
+    -> idmatkul int,
+    -> tgl_daftar date,
+    -> foreign key (stambuk) references mahasiswa(stambuk),
+    -> foreign key (idmatkul) references matkul(idmatkul));
+Query OK, 0 rows affected (0.025 sec)
+
+MariaDB [univ]> show tables;
++----------------+
+| Tables_in_univ |
++----------------+
+| mahasiswa      |
+| matkul         |
+| pendaftaran    |
++----------------+
+3 rows in set (0.001 sec)
+
+MariaDB [univ]> desc mahasiswa;
 +---------+-------------+------+-----+---------+-------+
 | Field   | Type        | Null | Key | Default | Extra |
 +---------+-------------+------+-----+---------+-------+
-| stambuk | int(11)     | NO   | PRI | NULL    |       |
-| nama    | varchar(50) | YES  |     | NULL    |       |
+| stambuk | int(15)     | NO   | PRI | NULL    |       |
+| nama    | varchar(30) | YES  |     | NULL    |       |
 | jurusan | varchar(30) | YES  |     | NULL    |       |
 +---------+-------------+------+-----+---------+-------+
-3 rows in set (0.030 sec)
+3 rows in set (0.016 sec)
 
-MariaDB [universitas]> desc matkul;
-+-------------+-------------+------+-----+---------+-------+
-| Field       | Type        | Null | Key | Default | Extra |
-+-------------+-------------+------+-----+---------+-------+
-| idmatkul    | int(11)     | NO   | PRI | NULL    |       |
-| nama_matkul | varchar(20) | YES  |     | NULL    |       |
-| sks         | int(11)     | YES  |     | NULL    |       |
-+-------------+-------------+------+-----+---------+-------+
-3 rows in set (0.021 sec)
+MariaDB [univ]> insert into mahasiswa values
+    -> (1302020111, 'injun', 'teknik informatika'),
+    -> (1302022183, 'zara', 'teknik informatika'),
+    -> (1302019213, 'zakaria', 'sistem informasi');
+Query OK, 3 rows affected (0.003 sec)
+Records: 3  Duplicates: 0  Warnings: 0
 
-MariaDB [universitas]> desc pendaftaran;
-+------------+---------+------+-----+---------+-------+
-| Field      | Type    | Null | Key | Default | Extra |
-+------------+---------+------+-----+---------+-------+
-| id_daftar  | int(11) | NO   | PRI | NULL    |       |
-| stambuk    | int(11) | YES  | MUL | NULL    |       |
-| idmatkul   | int(11) | YES  | MUL | NULL    |       |
-| tgl_daftar | date    | YES  |     | NULL    |       |
-+------------+---------+------+-----+---------+-------+
-4 rows in set (0.022 sec)
+MariaDB [univ]> update mahasiswa set stambuk = '1312019213' where stambuk = '1302019213';
+Query OK, 1 row affected (0.005 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
 
-MariaDB [universitas]> select * from mahasiswa;
+MariaDB [univ]> insert into matkul values
+    -> (1, 'basis data', 3),
+    -> (2, 'struktur data', 2),
+    -> (3, 'pemrograman web', 3);
+Query OK, 3 rows affected (0.007 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+MariaDB [univ]> insert into pendaftaran values
+    -> (1, 1312019213, 3, '2019-06-23'),
+    -> (2, 1302020111, 2, '2020-04-30'),
+    -> (3, 1302022183, 1, '2022-07-17'),
+    -> (3, 1302022183, 1, '2022-07-17'),
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 5
+MariaDB [univ]> insert into pendaftaran values
+    -> (1, 1312019213, 3, '2019-06-23'),
+    -> (2, 1302020111, 2, '2020-04-30'),
+    -> (3, 1302022183, 1, '2022-07-17'),
+    -> (4, 1302022183, 3, '2022-07-17'),
+    -> (5, 1312019213, 2, '2019-06-23');
+Query OK, 5 rows affected (0.005 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+MariaDB [univ]> select * from mahasiswa;
 +------------+---------+--------------------+
 | stambuk    | nama    | jurusan            |
 +------------+---------+--------------------+
@@ -84,9 +126,9 @@ MariaDB [universitas]> select * from mahasiswa;
 | 1302022183 | zara    | teknik informatika |
 | 1312019213 | zakaria | sistem informasi   |
 +------------+---------+--------------------+
-3 rows in set (0.010 sec)
+3 rows in set (0.001 sec)
 
-MariaDB [universitas]> select * from matkul;
+MariaDB [univ]> select * from matkul;
 +----------+-----------------+------+
 | idmatkul | nama_matkul     | sks  |
 +----------+-----------------+------+
@@ -96,7 +138,7 @@ MariaDB [universitas]> select * from matkul;
 +----------+-----------------+------+
 3 rows in set (0.001 sec)
 
-MariaDB [universitas]> select * from pendaftaran;
+MariaDB [univ]> select * from pendaftaran;
 +-----------+------------+----------+------------+
 | id_daftar | stambuk    | idmatkul | tgl_daftar |
 +-----------+------------+----------+------------+
@@ -106,4 +148,4 @@ MariaDB [universitas]> select * from pendaftaran;
 |         4 | 1302022183 |        3 | 2022-07-17 |
 |         5 | 1312019213 |        2 | 2019-06-23 |
 +-----------+------------+----------+------------+
-5 rows in set (0.001 sec)
+5 rows in set (0.000 sec)
